@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: kafka-server
+    env: docker
+    plan: free
+    autoDeploy: false
+    disk:
+      name: kafka-data
+      mountPath: /bitnami
+      sizeGB: 1

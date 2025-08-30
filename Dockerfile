@@ -1,13 +1,10 @@
-FROM bitnami/kafka:3.5.1
+FROM wurstmeister/kafka:2.13-2.8.0
 
-# Expose ports for Kafka and Zookeeper
+# ZooKeeper runs internally on 2181
+ENV KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://0.0.0.0:9092
+ENV KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+ENV KAFKA_ZOOKEEPER_CONNECT=localhost:2181
+
 EXPOSE 9092 2181
 
-# Environment variables for Zookeeper & Kafka
-ENV KAFKA_CFG_ZOOKEEPER_CONNECT=localhost:2181 \
-    KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://0.0.0.0:9092 \
-    KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9092 \
-    ALLOW_PLAINTEXT_LISTENER=yes \
-    KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-
-CMD ["/opt/bitnami/scripts/kafka/entrypoint.sh", "/run.sh"]
+CMD ["sh", "-c", "service zookeeper start && start-kafka.sh"]
